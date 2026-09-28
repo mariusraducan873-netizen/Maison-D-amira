@@ -59,17 +59,18 @@ section{max-width:1150px;margin:auto;padding:55px 20px}.title{text-align:center;
 
 <script>
 const defaultImg="data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600"><rect width="100%" height="100%" fill="#eee7dc"/><text x="50%" y="48%" text-anchor="middle" font-family="Georgia" font-size="32" fill="#806b52">Maison D'Amira</text><text x="50%" y="55%" text-anchor="middle" font-family="Arial" font-size="18" fill="#9b8a76">Fotografia produsului</text></svg>`);
+const sharedProducts=[{name:"Ramz Lattafa",price:"90 lei",image:"",category:"Parfumuri arăbești",desc:"Ramz Lattafa — parfum arăbesc disponibil la Maison D'Amira."}];
 let editIndex=-1;
 function get(){return JSON.parse(localStorage.getItem("damira_products")||"[]")}
 function save(p){localStorage.setItem("damira_products",JSON.stringify(p))}
 function esc(s){return String(s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 function wa(p){let text=`Bună! Doresc să comand: ${p.name}${p.price?" - "+p.price:""}.`;return "https://wa.me/40725061986?text="+encodeURIComponent(text)}
 function render(){
- let ps=get(), list=document.getElementById("productList"), ed=document.getElementById("editorList");list.innerHTML="";ed.innerHTML="";
+ let ps=[...sharedProducts,...get()], localPs=get(), list=document.getElementById("productList"), ed=document.getElementById("editorList");list.innerHTML="";ed.innerHTML="";
  if(!ps.length)list.innerHTML='<div class="empty">Nu ai adăugat încă produse.</div>';
  ps.forEach((p,i)=>{
  list.innerHTML+=`<article class="card"><img src="${esc(p.image)||defaultImg}" onerror="this.src=defaultImg"><div class="body"><div class="category">${esc(p.category)||"Produs"}</div><h3>${esc(p.name)}</h3><div class="desc">${esc(p.desc)}</div><div class="price">${esc(p.price)||"Preț la cerere"}</div><div class="card-actions"><a class="btn whatsapp small" target="_blank" href="${wa(p)}">💬 Comandă pe WhatsApp</a><a class="btn gold small" href="tel:0725061986">📞 Sună</a></div></div></article>`;
- ed.innerHTML+=`<div class="edit-row"><span><strong>${esc(p.name)}</strong> — ${esc(p.price)||"fără preț"}</span><span><button class="btn small" style="background:#eee" onclick="editProduct(${i})">Modifică</button> <button class="danger" onclick="deleteProduct(${i})">Șterge</button></span></div>`;
+ if(i>=sharedProducts.length){let li=i-sharedProducts.length;ed.innerHTML+=`<div class="edit-row"><span><strong>${esc(p.name)}</strong> — ${esc(p.price)||"fără preț"}</span><span><button class="btn small" style="background:#eee" onclick="editProduct(${li})">Modifică</button> <button class="danger" onclick="deleteProduct(${li})">Șterge</button></span></div>`}
  });
 }
 function saveProduct(){
