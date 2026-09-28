@@ -42,19 +42,19 @@ section{background:rgba(250,246,239,.92);border-radius:18px}
 <section id="despre" class="about">
 <h2 class="title">Despre Maison D'Amira</h2>
 <p>La Maison D'Amira alegi parfumuri arăbești atent selecționate, cu arome deosebite și prețuri accesibile. Punem accent pe produse care merită banii, comunicare directă și o experiență simplă de la alegere până la comandă. Descoperă parfumul potrivit pentru tine și comandă rapid, direct pe WhatsApp.</p>
-<p><strong>Comenzi WhatsApp: 0726 432 752</strong></p>
-<a class="btn whatsapp" style="margin-top:10px" target="_blank" href="https://wa.me/40726432752?text=Bun%C4%83!%20Doresc%20s%C4%83%20comand%20un%20produs%20de%20la%20Maison%20D%27Amira.">💬 Scrie-ne pe WhatsApp</a>
+<p><strong>Comenzi WhatsApp: 0726 423 752</strong></p>
+<a class="btn whatsapp" style="margin-top:10px" target="_blank" href="https://wa.me/40726423752?text=Bun%C4%83!%20Doresc%20s%C4%83%20comand%20un%20produs%20de%20la%20Maison%20D%27Amira.">💬 Scrie-ne pe WhatsApp</a>
 </section>
 
 
 
-<footer><strong>Maison D'Amira</strong><br>WhatsApp: 0726 432 752</footer>
+<footer><strong>Maison D'Amira</strong><br>WhatsApp: 0726 423 752</footer>
 
 <script>
 const defaultImg="data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(\`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600"><rect width="100%" height="100%" fill="#eee7dc"/><text x="50%" y="48%" text-anchor="middle" font-family="Georgia" font-size="32" fill="#806b52">Maison D'Amira</text><text x="50%" y="55%" text-anchor="middle" font-family="Arial" font-size="18" fill="#9b8a76">Fotografia produsului</text></svg>\`);
 let products=[],editName="";
 function esc(s){return String(s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-function wa(p){let text=\`Bună! Doresc să comand: \${p.name}\${p.price?" - "+p.price:""}.\`;return "https://wa.me/40726432752?text="+encodeURIComponent(text)}
+function wa(p){let text=\`Bună! Doresc să comand: \${p.name}\${p.price?" - "+p.price:""}.\`;return "https://wa.me/40726423752?text="+encodeURIComponent(text)}
 async function loadProducts(){try{const r=await fetch("products.json?v="+Date.now());products=await r.json()}catch(e){products=[]}render()}
 function render(){
  let list=document.getElementById("productList"),ed=document.getElementById("editorList");list.innerHTML="";ed.innerHTML="";
