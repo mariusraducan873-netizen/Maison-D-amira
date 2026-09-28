@@ -57,10 +57,10 @@ function esc(s){return String(s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&l
 function wa(p){let text=\`Bună! Doresc să comand: \${p.name}\${p.price?" - "+p.price:""}.\`;return "https://wa.me/40726423752?text="+encodeURIComponent(text)}
 async function loadProducts(){try{const r=await fetch("products.json?v="+Date.now());products=await r.json()}catch(e){products=[]}render()}
 function render(){
- let list=document.getElementById("productList"),ed=document.getElementById("editorList");list.innerHTML="";ed.innerHTML="";
+ let list=document.getElementById("productList");list.innerHTML="";
  if(!products.length)list.innerHTML='<div class="empty">Nu ai adăugat încă produse.</div>';
  products.forEach((p,i)=>{
-  list.innerHTML+=\`<article class="card"><img src="\${esc(p.image)||defaultImg}" onerror="this.src=defaultImg"><div class="body"><div class="category">\${esc(p.category)||"Produs"}</div><h3>\${esc(p.name)}</h3><div class="desc">\${esc(p.desc)}</div><div class="price">\${esc(p.price)||"Preț la cerere"}</div><div class="card-actions"><a class="btn whatsapp small" target="_blank" href="\${wa(p)}">💬 Comandă pe WhatsApp</a><a class="btn gold small" href="tel:0725061986">📞 Sună</a></div></div></article>\`;
+  list.innerHTML+=\`<article class="card"><img src="\${esc(p.image)||defaultImg}" onerror="this.src=defaultImg"><div class="body"><div class="category">\${esc(p.category)||"Produs"}</div><h3>\${esc(p.name)}</h3><div class="desc">\${esc(p.desc)}</div><div class="price">\${esc(p.price)||"Preț la cerere"}</div><div class="card-actions"><a class="btn whatsapp small" target="_blank" href="\${wa(p)}">💬 Comandă pe WhatsApp</a><a class="btn gold small" href="tel:0726423752">📞 Sună</a></div></div></article>\`;
   ed.innerHTML+=\`<div class="edit-row"><span><strong>\${esc(p.name)}</strong> — \${esc(p.price)||"fără preț"}</span><span><button class="btn small" style="background:#eee" onclick="editProduct(\${i})">Modifică</button> <button class="danger" onclick="deleteProduct(\${i})">Șterge</button></span></div>\`;
  });
 }
