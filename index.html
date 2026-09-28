@@ -7,10 +7,25 @@
 <style>
 :root{--dark:#211a17;--gold:#b9914f;--cream:#faf6ef;--white:#fff;--muted:#756b63;--green:#25D366}
 *{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:var(--cream);color:var(--dark)}
-header{background:linear-gradient(135deg,#211a17,#4b392b);color:white;padding:20px 6%;display:flex;justify-content:space-between;align-items:center;gap:20px;position:sticky;top:0;z-index:10}.logo{font:30px Georgia,serif;color:#f2d49b}.tag{font-size:13px;color:#eee;margin-top:3px}nav a{color:#fff;text-decoration:none;margin-left:18px;font-size:14px}
-.hero{text-align:center;padding:85px 20px;background:radial-gradient(circle,#fffaf1,#eadbc5)}.hero h1{font:48px Georgia,serif;margin:0 0 12px}.hero p{color:var(--muted);font-size:18px}.btn{display:inline-block;border:0;border-radius:30px;padding:12px 20px;text-decoration:none;font-weight:bold;cursor:pointer}.gold{background:var(--gold);color:#fff}.whatsapp{background:var(--green);color:#fff}
-section{max-width:1150px;margin:auto;padding:55px 20px}.title{text-align:center;font:32px Georgia,serif;margin:0 0 30px}.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:22px}.card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 7px 25px #0001}.card img{width:100%;height:250px;object-fit:cover;background:#eee}.body{padding:18px}.body h3{font:21px Georgia,serif;margin:6px 0}.category{font-size:12px;color:#9b7a45}.price{font-size:19px;font-weight:bold;color:#9b7635;margin:12px 0}.desc{font-size:14px;color:var(--muted);min-height:42px;line-height:1.5}.card-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}.small{padding:9px 13px;font-size:13px}
-.about{max-width:none;background:#211a17;color:#fff;text-align:center}.about p{max-width:700px;margin:0 auto 12px;line-height:1.7;color:#ddd}.admin{background:#fff;border-radius:18px;padding:25px;box-shadow:0 7px 25px #0001}.form{display:grid;grid-template-columns:1fr 1fr;gap:12px}.form input,.form textarea{padding:12px;border:1px solid #ddd;border-radius:10px;font:inherit}.form textarea{grid-column:1/-1;min-height:90px}.full{grid-column:1/-1}.product-editor{margin-top:28px;border-top:1px solid #eee;padding-top:20px}.edit-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;border-bottom:1px solid #eee}.danger{background:#f3eaea;color:#8b3333;border:0;border-radius:20px;padding:8px 12px;cursor:pointer}.notice{background:#fff7df;padding:13px;border-radius:10px;color:#715c2f;font-size:14px;margin-bottom:18px}footer{text-align:center;background:#16110f;color:#ddd;padding:30px}.empty{text-align:center;color:var(--muted);grid-column:1/-1;padding:30px}
+header{background:linear-gradient(135deg,#211a17,#4b392b);color:white;padding:20px 6%;display:flex;justify-content:space-between;align-items:center;gap:20px;position:sticky;top:0;z-index:10}
+.logo{font:30px Georgia,serif;color:#f2d49b}.tag{font-size:13px;color:#eee;margin-top:3px}
+nav a{color:#fff;text-decoration:none;margin-left:18px;font-size:14px}
+.hero{text-align:center;padding:85px 20px;background:radial-gradient(circle,#fffaf1,#eadbc5)}.hero h1{font:48px Georgia,serif;margin:0 0 12px}.hero p{color:var(--muted);font-size:18px}
+.btn{display:inline-block;border:0;border-radius:30px;padding:12px 20px;text-decoration:none;font-weight:bold;cursor:pointer}.gold{background:var(--gold);color:#fff}.whatsapp{background:var(--green);color:#fff}
+section{max-width:1150px;margin:auto;padding:55px 20px}.title{text-align:center;font:32px Georgia,serif;margin:0 0 30px}
+.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:22px}.card{background:#fff;border-radius:16px;overflow:hidden;box-shadow:0 7px 25px #0001}
+.card img{width:100%;height:250px;object-fit:cover;background:#eee}.body{padding:18px}.body h3{font:21px Georgia,serif;margin:6px 0}
+.category{font-size:12px;color:#9b7a45}.price{font-size:19px;font-weight:bold;color:#9b7635;margin:12px 0}
+.desc{font-size:14px;color:var(--muted);min-height:42px;line-height:1.5}.card-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:15px}.small{padding:9px 13px;font-size:13px}
+.about{max-width:none;background:#211a17;color:#fff;text-align:center}.about p{max-width:700px;margin:0 auto 12px;line-height:1.7;color:#ddd}
+.admin{background:#fff;border-radius:18px;padding:25px;box-shadow:0 7px 25px #0001}.form{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+.form input,.form textarea{padding:12px;border:1px solid #ddd;border-radius:10px;font:inherit}.form textarea{grid-column:1/-1;min-height:90px}.full{grid-column:1/-1}
+.product-editor{margin-top:28px;border-top:1px solid #eee;padding-top:20px}.edit-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:12px;border-bottom:1px solid #eee}
+.danger{background:#f3eaea;color:#8b3333;border:0;border-radius:20px;padding:8px 12px;cursor:pointer}
+.notice{background:#fff7df;padding:13px;border-radius:10px;color:#715c2f;font-size:14px;margin-bottom:18px}
+.login-box{max-width:500px;margin:auto}.login-box input{width:100%;padding:12px;border:1px solid #ddd;border-radius:10px;font:inherit;margin:7px 0 12px}
+.status{margin:12px 0;padding:10px;border-radius:10px;background:#f4f4f4;font-size:14px}.hidden{display:none}
+footer{text-align:center;background:#16110f;color:#ddd;padding:30px}.empty{text-align:center;color:var(--muted);grid-column:1/-1;padding:30px}
 @media(max-width:700px){header{flex-direction:column;align-items:flex-start}nav a{margin:0 12px 0 0}.hero h1{font-size:38px}.form{grid-template-columns:1fr}.form textarea,.full{grid-column:auto}.edit-row{align-items:flex-start;flex-direction:column}}
 </style>
 </head>
@@ -28,7 +43,7 @@ section{max-width:1150px;margin:auto;padding:55px 20px}.title{text-align:center;
 
 <section id="produse">
 <h2 class="title">Produsele noastre</h2>
-<div id="productList" class="products"></div>
+<div id="productList" class="products"><div class="empty">Se încarcă produsele...</div></div>
 </section>
 
 <section id="despre" class="about">
@@ -39,48 +54,171 @@ section{max-width:1150px;margin:auto;padding:55px 20px}.title{text-align:center;
 </section>
 
 <section id="admin">
-<h2 class="title">Editează produsele</h2>
+<h2 class="title">Admin</h2>
 <div class="admin">
-<div class="notice">Aici poți adăuga, modifica și șterge produsele. Nu trebuie să umbli la cod pentru produsele din magazin.</div>
+
+<div id="loginArea" class="login-box">
+<div class="notice">Zona de administrare este protejată. Clienții pot vedea produsele, dar numai administratorul le poate adăuga, modifica sau șterge.</div>
+<label>Email</label>
+<input id="email" type="email" value="mariusraducan873@gmail.com" autocomplete="username">
+<label>Parolă</label>
+<input id="password" type="password" placeholder="Parola Firebase" autocomplete="current-password">
+<button class="btn gold" id="loginBtn">Intră în administrare</button>
+<div id="loginMsg" class="status hidden"></div>
+</div>
+
+<div id="adminArea" class="hidden">
+<div class="notice">Ești conectat ca administrator. Produsele adăugate aici sunt salvate online în Firebase și vor fi vizibile tuturor vizitatorilor.</div>
+<div class="status">Administrator: <strong id="adminEmail"></strong> <button class="btn small" style="float:right;background:#eee" id="logoutBtn">Ieșire</button></div>
+
 <div class="form">
 <input id="name" placeholder="Numele produsului *">
 <input id="price" placeholder="Preț (ex. 149 lei)">
 <input id="image" placeholder="Link fotografie">
 <input id="category" placeholder="Categorie (ex. Parfumuri arăbești)">
 <textarea id="desc" placeholder="Descriere produs"></textarea>
-<div class="full"><button class="btn gold" onclick="saveProduct()">+ Adaugă produs</button>
-<button class="btn" style="background:#eee" onclick="cancelEdit()">Anulează</button></div>
+<div class="full">
+<button class="btn gold" id="saveBtn">+ Adaugă produs</button>
+<button class="btn" style="background:#eee" id="cancelBtn">Anulează</button>
+</div>
 </div>
 <div class="product-editor"><h3>Produsele tale</h3><div id="editorList"></div></div>
+</div>
+
 </div>
 </section>
 
 <footer><strong>Maison D'Amira</strong><br>WhatsApp: 0725 061 986</footer>
 
-<script>
+<script type="module">
+import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
+import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+import { getDatabase, ref, onValue, push, set, remove } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
+
+const firebaseConfig = {
+  apiKey: "AIzaSyCNa3qQsFn5QrW0aQg_hpuE7px11t5kA7M",
+  authDomain: "maison-d-amira.firebaseapp.com",
+  projectId: "maison-d-amira",
+  storageBucket: "maison-d-amira.firebasestorage.app",
+  messagingSenderId: "18752161150",
+  appId: "1:18752161150:web:f377517bdbd9bb4d14df2f",
+  measurementId: "G-B44H70L6GR"
+};
+
+const app = initializeApp(firebaseConfig);
+const auth = getAuth(app);
+const db = getDatabase(app, "https://maison-d-amira-default-rtdb.europe-west1.firebasedatabase.app");
+const ADMIN_EMAIL = "mariusraducan873@gmail.com";
+const productsRef = ref(db, "products");
 const defaultImg="data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600"><rect width="100%" height="100%" fill="#eee7dc"/><text x="50%" y="48%" text-anchor="middle" font-family="Georgia" font-size="32" fill="#806b52">Maison D'Amira</text><text x="50%" y="55%" text-anchor="middle" font-family="Arial" font-size="18" fill="#9b8a76">Fotografia produsului</text></svg>`);
-let editIndex=-1;
-function get(){return JSON.parse(localStorage.getItem("damira_products")||"[]")}
-function save(p){localStorage.setItem("damira_products",JSON.stringify(p))}
+
+let products = {};
+let editId = null;
+
 function esc(s){return String(s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 function wa(p){let text=`Bună! Doresc să comand: ${p.name}${p.price?" - "+p.price:""}.`;return "https://wa.me/40725061986?text="+encodeURIComponent(text)}
-function render(){
- let ps=get(), list=document.getElementById("productList"), ed=document.getElementById("editorList");list.innerHTML="";ed.innerHTML="";
- if(!ps.length)list.innerHTML='<div class="empty">Nu ai adăugat încă produse.</div>';
- ps.forEach((p,i)=>{
- list.innerHTML+=`<article class="card"><img src="${esc(p.image)||defaultImg}" onerror="this.src=defaultImg"><div class="body"><div class="category">${esc(p.category)||"Produs"}</div><h3>${esc(p.name)}</h3><div class="desc">${esc(p.desc)}</div><div class="price">${esc(p.price)||"Preț la cerere"}</div><div class="card-actions"><a class="btn whatsapp small" target="_blank" href="${wa(p)}">💬 Comandă pe WhatsApp</a><a class="btn gold small" href="tel:0725061986">📞 Sună</a></div></div></article>`;
- ed.innerHTML+=`<div class="edit-row"><span><strong>${esc(p.name)}</strong> — ${esc(p.price)||"fără preț"}</span><span><button class="btn small" style="background:#eee" onclick="editProduct(${i})">Modifică</button> <button class="danger" onclick="deleteProduct(${i})">Șterge</button></span></div>`;
- });
+
+function renderPublic(){
+  const list=document.getElementById("productList");
+  list.innerHTML="";
+  const entries=Object.entries(products);
+  if(!entries.length){list.innerHTML='<div class="empty">Nu ai adăugat încă produse.</div>';return;}
+  entries.forEach(([id,p])=>{
+    list.innerHTML+=`<article class="card"><img src="${esc(p.image)||defaultImg}" onerror="this.src=defaultImg"><div class="body"><div class="category">${esc(p.category)||"Produs"}</div><h3>${esc(p.name)}</h3><div class="desc">${esc(p.desc)}</div><div class="price">${esc(p.price)||"Preț la cerere"}</div><div class="card-actions"><a class="btn whatsapp small" target="_blank" href="${wa(p)}">💬 Comandă pe WhatsApp</a><a class="btn gold small" href="tel:0725061986">📞 Sună</a></div></div></article>`;
+  });
 }
-function saveProduct(){
- let name=document.getElementById("name").value.trim();if(!name){alert("Completează numele produsului.");return}
- let p={name,price:document.getElementById("price").value.trim(),image:document.getElementById("image").value.trim(),category:document.getElementById("category").value.trim(),desc:document.getElementById("desc").value.trim()};
- let ps=get(); if(editIndex<0)ps.push(p);else ps[editIndex]=p;save(ps);cancelEdit();render();
+
+function renderEditor(){
+  const ed=document.getElementById("editorList");
+  ed.innerHTML="";
+  const entries=Object.entries(products);
+  if(!entries.length){ed.innerHTML='<div class="empty">Nu ai încă produse.</div>';return;}
+  entries.forEach(([id,p])=>{
+    ed.innerHTML+=`<div class="edit-row"><span><strong>${esc(p.name)}</strong> — ${esc(p.price)||"fără preț"}</span><span><button class="btn small" style="background:#eee" data-edit="${id}">Modifică</button> <button class="danger" data-delete="${id}">Șterge</button></span></div>`;
+  });
+  ed.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>editProduct(b.dataset.edit));
+  ed.querySelectorAll("[data-delete]").forEach(b=>b.onclick=()=>deleteProduct(b.dataset.delete));
 }
-function editProduct(i){let p=get()[i];editIndex=i;for(let k of ["name","price","image","category","desc"])document.getElementById(k).value=p[k]||"";document.querySelector("#admin").scrollIntoView({behavior:"smooth"});document.querySelector("#admin .gold").textContent="Salvează modificarea"}
-function cancelEdit(){editIndex=-1;["name","price","image","category","desc"].forEach(id=>document.getElementById(id).value="");document.querySelector("#admin .gold").textContent="+ Adaugă produs"}
-function deleteProduct(i){if(confirm("Ștergi acest produs?")){let p=get();p.splice(i,1);save(p);render()}}
-render();
+
+function clearForm(){
+  editId=null;
+  ["name","price","image","category","desc"].forEach(id=>document.getElementById(id).value="");
+  document.getElementById("saveBtn").textContent="+ Adaugă produs";
+}
+
+function editProduct(id){
+  const p=products[id]; if(!p)return;
+  editId=id;
+  ["name","price","image","category","desc"].forEach(k=>document.getElementById(k).value=p[k]||"");
+  document.getElementById("saveBtn").textContent="Salvează modificarea";
+  document.getElementById("admin").scrollIntoView({behavior:"smooth"});
+}
+
+async function deleteProduct(id){
+  if(!confirm("Ștergi acest produs?"))return;
+  try{await remove(ref(db,"products/"+id));}
+  catch(e){alert("Nu s-a putut șterge produsul. Verifică dacă ești conectat ca administrator.");}
+}
+
+document.getElementById("saveBtn").onclick=async()=>{
+  const user=auth.currentUser;
+  if(!user || user.email.toLowerCase()!==ADMIN_EMAIL.toLowerCase()){alert("Trebuie să fii conectat ca administrator.");return;}
+  const name=document.getElementById("name").value.trim();
+  if(!name){alert("Completează numele produsului.");return;}
+  const p={
+    name,
+    price:document.getElementById("price").value.trim(),
+    image:document.getElementById("image").value.trim(),
+    category:document.getElementById("category").value.trim(),
+    desc:document.getElementById("desc").value.trim()
+  };
+  try{
+    if(editId) await set(ref(db,"products/"+editId),p);
+    else await set(push(productsRef),p);
+    clearForm();
+  }catch(e){alert("Nu s-a putut salva produsul. Verifică regulile Firebase.");}
+};
+
+document.getElementById("cancelBtn").onclick=clearForm;
+
+document.getElementById("loginBtn").onclick=async()=>{
+  const email=document.getElementById("email").value.trim();
+  const password=document.getElementById("password").value;
+  const msg=document.getElementById("loginMsg");
+  msg.classList.remove("hidden");
+  msg.textContent="Se verifică...";
+  try{
+    const cred=await signInWithEmailAndPassword(auth,email,password);
+    if((cred.user.email||"").toLowerCase()!==ADMIN_EMAIL.toLowerCase()){
+      await signOut(auth);
+      throw new Error("Acest cont nu este administratorul.");
+    }
+    msg.textContent="";
+    msg.classList.add("hidden");
+  }catch(e){msg.textContent="Emailul sau parola nu sunt corecte, ori contul nu are acces de administrator.";}
+};
+
+document.getElementById("logoutBtn").onclick=()=>signOut(auth);
+
+onAuthStateChanged(auth,user=>{
+  const ok=user && (user.email||"").toLowerCase()===ADMIN_EMAIL.toLowerCase();
+  document.getElementById("loginArea").classList.toggle("hidden",!!ok);
+  document.getElementById("adminArea").classList.toggle("hidden",!ok);
+  if(ok) document.getElementById("adminEmail").textContent=user.email;
+});
+
+onValue(productsRef,snap=>{
+  products=snap.val()||{};
+  renderPublic();
+  if(auth.currentUser && auth.currentUser.email.toLowerCase()===ADMIN_EMAIL.toLowerCase()) renderEditor();
+},err=>{
+  document.getElementById("productList").innerHTML='<div class="empty">Produsele nu pot fi încărcate momentan. Verifică regulile Firebase.</div>';
+});
+
+onAuthStateChanged(auth,user=>{
+  if(user && (user.email||"").toLowerCase()===ADMIN_EMAIL.toLowerCase()) renderEditor();
+  else document.getElementById("editorList").innerHTML="";
+});
 </script>
 </body>
 </html>
