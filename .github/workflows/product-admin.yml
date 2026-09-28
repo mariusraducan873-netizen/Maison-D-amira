@@ -1,0 +1,68 @@
+name: Actualizare produse Maison D'Amira
+
+on:
+  issues:
+    types: [opened]
+
+permissions:
+  contents: write
+  issues: write
+
+jobs:
+  update-products:
+    if: github.event.issue.user.login == 'mariusraducan873-netizen' && startsWith(github.event.issue.title, '[MAISON-PRODUCT]')
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Procesează modificarea
+        env:
+          ISSUE_BODY: ${{ github.event.issue.body }}
+        run: |
+          python - <<'PY'
+          import json, os, re
+          body=os.environ["ISSUE_BODY"]
+          m=re.search(r'```json\s*(.*?)\s*```', body, re.S)
+          if not m:
+              raise SystemExit("Payload JSON lipsă")
+          payload=json.loads(m.group(1))
+          path="products.json"
+          try:
+              products=json.load(open(path, encoding="utf-8"))
+          except FileNotFoundError:
+              products=[]
+          action=payload.get("action")
+          product=payload.get("product") or {}
+          old=payload.get("oldName","")
+          if action=="add":
+              products.append(product)
+          elif action=="update":
+              found=False
+              for i,p in enumerate(products):
+                  if p.get("name")==old:
+                      products[i]=product
+                      found=True
+                      break
+              if not found:
+                  products.append(product)
+          elif action=="delete":
+              products=[p for p in products if p.get("name")!=old]
+          else:
+              raise SystemExit("Acțiune necunoscută")
+          with open(path,"w",encoding="utf-8") as f:
+              json.dump(products,f,ensure_ascii=False,indent=2)
+              f.write("\n")
+          PY
+
+      - name: Publică modificarea
+        run: |
+          git config user.name "Maison D'Amira"
+          git config user.email "actions@github.com"
+          git add products.json
+          git commit -m "Actualizează catalogul de produse"
+          git push
+
+      - name: Închide cererea
+        env:
+          GH_TOKEN: ${{ github.token }}
+        run: gh issue close ${{ github.event.issue.number }} --repo "${{ github.repository }}" --comment "Produsul a fost actualizat pe site."
