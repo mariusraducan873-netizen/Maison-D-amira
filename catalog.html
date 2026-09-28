@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html lang="ro">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<meta name="theme-color" content="#211a17">
+<link rel="manifest" href="manifest.webmanifest">
+<title>Catalog produse — Maison D'Amira</title>
+<style>
+:root{--dark:#211a17;--gold:#b9914f;--cream:#faf6ef;--muted:#756b63;--green:#25D366}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;color:var(--dark);background:#090806 url('logo-bg.svg') center top/cover fixed no-repeat}
+header{background:rgba(24,17,11,.94);color:#fff;padding:18px 6%;display:flex;justify-content:space-between;align-items:center;gap:20px;position:sticky;top:0;z-index:10}
+.logo{font:30px Georgia,serif;color:#f2d49b}.tag{font-size:13px;color:#eee;margin-top:3px}
+nav a{color:#fff;text-decoration:none;margin-left:18px;font-size:14px}
+main{max-width:1150px;margin:auto;padding:45px 20px}
+.intro{text-align:center;color:#fff;margin-bottom:30px}.intro h1{font:42px Georgia,serif;margin:0 0 8px}.intro p{font-size:17px;color:#eee}
+.products{display:grid;grid-template-columns:repeat(auto-fill,minmax(235px,1fr));gap:22px}
+.card{background:rgba(250,246,239,.96);border-radius:16px;overflow:hidden;box-shadow:0 7px 25px #0004}
+.card img{width:100%;height:280px;object-fit:contain;background:#eee7dc;display:block}
+.body{padding:18px}.category{font-size:12px;color:#9b7a45}.body h2{font:21px Georgia,serif;margin:6px 0}.desc{font-size:14px;color:var(--muted);line-height:1.5;min-height:42px}.price{font-size:20px;font-weight:bold;color:#9b7635;margin:12px 0}
+.actions{display:flex;gap:8px;flex-wrap:wrap}.btn{display:inline-block;border:0;border-radius:30px;padding:10px 13px;text-decoration:none;font-weight:bold;font-size:13px}.whatsapp{background:var(--green);color:#fff}.gold{background:var(--gold);color:#fff}
+.empty{text-align:center;background:rgba(250,246,239,.95);border-radius:16px;padding:35px}
+footer{text-align:center;background:#16110f;color:#ddd;padding:25px}
+@media(max-width:700px){header{flex-direction:column;align-items:flex-start}.intro h1{font-size:34px}nav a{margin:0 12px 0 0}}
+</style>
+</head>
+<body>
+<header>
+<div><div class="logo">Maison D'Amira</div><div class="tag">Catalog de produse</div></div>
+<nav><a href="index.html">Acasă</a><a href="admin.html">Administrare</a></nav>
+</header>
+<main>
+<div class="intro"><h1>Catalog Maison D'Amira</h1><p>Descoperă produsele disponibile și comandă direct pe WhatsApp.</p></div>
+<div id="productList" class="products"></div>
+</main>
+<footer><strong>Maison D'Amira</strong><br>WhatsApp: 0726 423 752</footer>
+<script>
+const defaultImg="data:image/svg+xml;charset=UTF-8,"+encodeURIComponent('<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600"><rect width="100%" height="100%" fill="#eee7dc"/><text x="50%" y="48%" text-anchor="middle" font-family="Georgia" font-size="32" fill="#806b52">Maison D’Amira</text><text x="50%" y="55%" text-anchor="middle" font-family="Arial" font-size="18" fill="#9b8a76">Fotografia produsului</text></svg>');
+function esc(s){return String(s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function wa(p){return "https://wa.me/40726423752?text="+encodeURIComponent("Bună! Doresc să comand: "+p.name+(p.price?" - "+p.price:"")+"." )}
+async function load(){
+ const list=document.getElementById("productList");
+ try{
+  const r=await fetch("products.json?v="+Date.now(),{cache:"no-store"});
+  if(!r.ok)throw new Error("Catalog indisponibil");
+  const products=await r.json();
+  if(!Array.isArray(products)||!products.length){list.innerHTML='<div class="empty">Nu există produse disponibile momentan.</div>';return}
+  list.innerHTML=products.map(p=>'<article class="card"><img src="'+esc(p.image)||defaultImg+'" onerror="this.src=defaultImg"><div class="body"><div class="category">'+(esc(p.category)||"Produs")+'</div><h2>'+esc(p.name)+'</h2><div class="desc">'+esc(p.desc)+'</div><div class="price">'+(esc(p.price)||"Preț la cerere")+'</div><div class="actions"><a class="btn whatsapp" target="_blank" href="'+wa(p)+'">💬 WhatsApp</a><a class="btn gold" href="tel:0726423752">📞 Sună</a></div></div></article>').join("");
+ }catch(e){list.innerHTML='<div class="empty">Catalogul nu a putut fi încărcat. Reîncarcă pagina.</div>'}
+}
+load();
+</script>
+</body>
+</html>
