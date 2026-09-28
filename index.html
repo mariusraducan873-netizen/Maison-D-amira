@@ -64,6 +64,7 @@ footer{text-align:center;background:#16110f;color:#ddd;padding:30px}.empty{text-
 <label>Parolă</label>
 <input id="password" type="password" placeholder="Parola Firebase" autocomplete="current-password">
 <button class="btn gold" id="loginBtn">Intră în administrare</button>
+<button class="btn" style="background:#eee;margin-left:8px" id="resetBtn">Resetează parola</button>
 <div id="loginMsg" class="status hidden"></div>
 </div>
 
@@ -92,7 +93,7 @@ footer{text-align:center;background:#16110f;color:#ddd;padding:30px}.empty{text-
 
 <script type="module">
 import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
+import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
 import { getDatabase, ref, onValue, push, set, remove } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
 
 const firebaseConfig = {
@@ -195,7 +196,42 @@ document.getElementById("loginBtn").onclick=async()=>{
     }
     msg.textContent="";
     msg.classList.add("hidden");
-  }catch(e){msg.textContent="Emailul sau parola nu sunt corecte, ori contul nu are acces de administrator.";}
+  }catch(e){
+    console.error("Firebase login:",e);
+    const code=e?.code||"eroare necunoscută";
+    const friendly={
+      "auth/invalid-credential":"Emailul sau parola sunt incorecte.",
+      "auth/invalid-email":"Adresa de email nu este validă.",
+      "auth/user-not-found":"Nu există acest cont în Firebase Authentication.",
+      "auth/wrong-password":"Parola este incorectă.",
+      "auth/operation-not-allowed":"Autentificarea cu Email/Parolă nu este activată în Firebase.",
+      "auth/unauthorized-domain":"Domeniul GitHub Pages nu este autorizat în Firebase Authentication.",
+      "auth/too-many-requests":"Au fost prea multe încercări. Așteaptă puțin și încearcă din nou."
+    };
+    msg.textContent=(friendly[code]||"Eroare Firebase: "+code)+" Dacă problema continuă, codul este: "+code;
+  }
+};
+
+document.getElementById("resetBtn").onclick=async()=>{
+  const email=document.getElementById("email").value.trim();
+  const msg=document.getElementById("loginMsg");
+  if(!email){msg.classList.remove("hidden");msg.textContent="Introdu adresa de email.";return;}
+  try{
+    await sendPasswordResetEmail(auth,email);
+    msg.classList.remove("hidden");
+    msg.textContent="Am trimis un email pentru resetarea parolei. Verifică și folderul Spam."; 
+  }catch(e){
+    console.error("Firebase reset:",e);
+    const code=e?.code||"eroare necunoscută";
+    const friendly={
+      "auth/invalid-email":"Adresa de email nu este validă.",
+      "auth/user-not-found":"Nu există acest cont în Firebase Authentication.",
+      "auth/operation-not-allowed":"Autentificarea cu Email/Parolă nu este activată în Firebase.",
+      "auth/unauthorized-domain":"Domeniul GitHub Pages nu este autorizat în Firebase Authentication."
+    };
+    msg.classList.remove("hidden");
+    msg.textContent=(friendly[code]||"Eroare Firebase: "+code)+" Cod: "+code;
+  }
 };
 
 document.getElementById("logoutBtn").onclick=()=>signOut(auth);
