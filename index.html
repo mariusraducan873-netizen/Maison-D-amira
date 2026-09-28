@@ -87,5 +87,6 @@ function deleteProduct(i){let p=products[i];if(confirm("Ștergi produsul "+p.nam
 function cancelEdit(){editName="";["name","price","image","category","desc"].forEach(id=>document.getElementById(id).value="");document.querySelector("#admin .gold").textContent="+ Adaugă produs"}
 loadProducts();
 </script>
+<div style="position:fixed;right:14px;bottom:14px;z-index:9999;padding:8px 12px;border-radius:999px;background:rgba(255,255,255,.92);box-shadow:0 4px 18px rgba(0,0,0,.15);font-weight:600;font-size:14px;color:#5b3b2a;backdrop-filter:blur(6px);">Madalina&Marius</div>
 </body>
 </html>
