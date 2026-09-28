@@ -41,7 +41,7 @@ section{max-width:1150px;margin:auto;padding:55px 20px}.title{text-align:center;
 <section id="admin">
 <h2 class="title">Administrare produse</h2>
 <div class="admin">
-<div class="notice">Poți adăuga, modifica și șterge produsele direct din acest browser. Produsele sunt salvate local pe dispozitivul pe care le editezi.</div>
+<div class="notice">Poți adăuga, modifica și șterge produsele pentru toți vizitatorii. La salvare se deschide GitHub pentru publicarea modificării; după publicare, site-ul se actualizează automat.</div>
 <div class="form">
 <input id="name" placeholder="Numele produsului *">
 <input id="price" placeholder="Preț (ex. 149 lei)">
@@ -58,30 +58,34 @@ section{max-width:1150px;margin:auto;padding:55px 20px}.title{text-align:center;
 <footer><strong>Maison D'Amira</strong><br>WhatsApp: 0725 061 986</footer>
 
 <script>
-const defaultImg="data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600"><rect width="100%" height="100%" fill="#eee7dc"/><text x="50%" y="48%" text-anchor="middle" font-family="Georgia" font-size="32" fill="#806b52">Maison D'Amira</text><text x="50%" y="55%" text-anchor="middle" font-family="Arial" font-size="18" fill="#9b8a76">Fotografia produsului</text></svg>`);
-const sharedProducts=[{name:"Ramz Lattafa",price:"90 lei",image:"",category:"Parfumuri arăbești",desc:"Ramz Lattafa — parfum arăbesc disponibil la Maison D'Amira."}];
-let editIndex=-1;
-function get(){return JSON.parse(localStorage.getItem("damira_products")||"[]")}
-function save(p){localStorage.setItem("damira_products",JSON.stringify(p))}
+const defaultImg="data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(\`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600"><rect width="100%" height="100%" fill="#eee7dc"/><text x="50%" y="48%" text-anchor="middle" font-family="Georgia" font-size="32" fill="#806b52">Maison D'Amira</text><text x="50%" y="55%" text-anchor="middle" font-family="Arial" font-size="18" fill="#9b8a76">Fotografia produsului</text></svg>\`);
+let products=[],editName="";
 function esc(s){return String(s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
-function wa(p){let text=`Bună! Doresc să comand: ${p.name}${p.price?" - "+p.price:""}.`;return "https://wa.me/40725061986?text="+encodeURIComponent(text)}
+function wa(p){let text=\`Bună! Doresc să comand: \${p.name}\${p.price?" - "+p.price:""}.\`;return "https://wa.me/40725061986?text="+encodeURIComponent(text)}
+async function loadProducts(){try{const r=await fetch("products.json?v="+Date.now());products=await r.json()}catch(e){products=[]}render()}
 function render(){
- let ps=[...sharedProducts,...get()], localPs=get(), list=document.getElementById("productList"), ed=document.getElementById("editorList");list.innerHTML="";ed.innerHTML="";
- if(!ps.length)list.innerHTML='<div class="empty">Nu ai adăugat încă produse.</div>';
- ps.forEach((p,i)=>{
- list.innerHTML+=`<article class="card"><img src="${esc(p.image)||defaultImg}" onerror="this.src=defaultImg"><div class="body"><div class="category">${esc(p.category)||"Produs"}</div><h3>${esc(p.name)}</h3><div class="desc">${esc(p.desc)}</div><div class="price">${esc(p.price)||"Preț la cerere"}</div><div class="card-actions"><a class="btn whatsapp small" target="_blank" href="${wa(p)}">💬 Comandă pe WhatsApp</a><a class="btn gold small" href="tel:0725061986">📞 Sună</a></div></div></article>`;
- if(i>=sharedProducts.length){let li=i-sharedProducts.length;ed.innerHTML+=`<div class="edit-row"><span><strong>${esc(p.name)}</strong> — ${esc(p.price)||"fără preț"}</span><span><button class="btn small" style="background:#eee" onclick="editProduct(${li})">Modifică</button> <button class="danger" onclick="deleteProduct(${li})">Șterge</button></span></div>`}
+ let list=document.getElementById("productList"),ed=document.getElementById("editorList");list.innerHTML="";ed.innerHTML="";
+ if(!products.length)list.innerHTML='<div class="empty">Nu ai adăugat încă produse.</div>';
+ products.forEach((p,i)=>{
+  list.innerHTML+=\`<article class="card"><img src="\${esc(p.image)||defaultImg}" onerror="this.src=defaultImg"><div class="body"><div class="category">\${esc(p.category)||"Produs"}</div><h3>\${esc(p.name)}</h3><div class="desc">\${esc(p.desc)}</div><div class="price">\${esc(p.price)||"Preț la cerere"}</div><div class="card-actions"><a class="btn whatsapp small" target="_blank" href="\${wa(p)}">💬 Comandă pe WhatsApp</a><a class="btn gold small" href="tel:0725061986">📞 Sună</a></div></div></article>\`;
+  ed.innerHTML+=\`<div class="edit-row"><span><strong>\${esc(p.name)}</strong> — \${esc(p.price)||"fără preț"}</span><span><button class="btn small" style="background:#eee" onclick="editProduct(\${i})">Modifică</button> <button class="danger" onclick="deleteProduct(\${i})">Șterge</button></span></div>\`;
  });
+}
+function issueUrl(action,p,oldName=""){
+ const payload={action,oldName,product:p};
+ const title="[MAISON-PRODUCT] "+action+" "+(p?.name||oldName||"produs");
+ const body="Actualizare produs Maison D'Amira.\\n\\n\\\`\\\`\\\`json\\n"+JSON.stringify(payload,null,2)+"\\n\\\`\\\`\\\`";
+ return "https://github.com/mariusraducan873-netizen/Maison-D-amira/issues/new?title="+encodeURIComponent(title)+"&body="+encodeURIComponent(body);
 }
 function saveProduct(){
  let name=document.getElementById("name").value.trim();if(!name){alert("Completează numele produsului.");return}
  let p={name,price:document.getElementById("price").value.trim(),image:document.getElementById("image").value.trim(),category:document.getElementById("category").value.trim(),desc:document.getElementById("desc").value.trim()};
- let ps=get(); if(editIndex<0)ps.push(p);else ps[editIndex]=p;save(ps);cancelEdit();render();
+ window.location.href=issueUrl(editName?"update":"add",p,editName);
 }
-function editProduct(i){let p=get()[i];editIndex=i;for(let k of ["name","price","image","category","desc"])document.getElementById(k).value=p[k]||"";document.querySelector("#admin").scrollIntoView({behavior:"smooth"});document.querySelector("#admin .gold").textContent="Salvează modificarea"}
-function cancelEdit(){editIndex=-1;["name","price","image","category","desc"].forEach(id=>document.getElementById(id).value="");document.querySelector("#admin .gold").textContent="+ Adaugă produs"}
-function deleteProduct(i){if(confirm("Ștergi acest produs?")){let p=get();p.splice(i,1);save(p);render()}}
-render();
+function editProduct(i){let p=products[i];editName=p.name;for(let k of ["name","price","image","category","desc"])document.getElementById(k).value=p[k]||"";document.querySelector("#admin").scrollIntoView({behavior:"smooth"});document.querySelector("#admin .gold").textContent="Publică modificarea"}
+function deleteProduct(i){let p=products[i];if(confirm("Ștergi produsul "+p.name+"?"))window.location.href=issueUrl("delete",p,p.name)}
+function cancelEdit(){editName="";["name","price","image","category","desc"].forEach(id=>document.getElementById(id).value="");document.querySelector("#admin .gold").textContent="+ Adaugă produs"}
+loadProducts();
 </script>
 </body>
 </html>
