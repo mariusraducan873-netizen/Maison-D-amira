@@ -1,0 +1,13 @@
+{
+  "name": "Maison D'Amira",
+  "short_name": "Maison D'Amira",
+  "description": "Parfumuri arăbești și produse alese cu grijă.",
+  "start_url": "./",
+  "display": "standalone",
+  "background_color": "#120d08",
+  "theme_color": "#211a17",
+  "lang": "ro",
+  "icons": [
+    {"src":"logo-bg.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+  ]
+}
