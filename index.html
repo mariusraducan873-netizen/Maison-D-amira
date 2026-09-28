@@ -54,207 +54,37 @@ footer{text-align:center;background:#16110f;color:#ddd;padding:30px}.empty{text-
 </section>
 
 <section id="admin">
-<h2 class="title">Admin</h2>
+<h2 class="title">Administrare</h2>
 <div class="admin">
-
-<div id="loginArea" class="login-box">
-<div class="notice">Zona de administrare este protejată. Clienții pot vedea produsele, dar numai administratorul le poate adăuga, modifica sau șterge.</div>
-<label>Email</label>
-<input id="email" type="email" value="mariusraducan873@gmail.com" autocomplete="username">
-<label>Parolă</label>
-<input id="password" type="password" placeholder="Parola Firebase" autocomplete="current-password">
-<button class="btn gold" id="loginBtn">Intră în administrare</button>
-<button class="btn" style="background:#eee;margin-left:8px" id="resetBtn">Resetează parola</button>
-<div id="loginMsg" class="status hidden"></div>
-</div>
-
-<div id="adminArea" class="hidden">
-<div class="notice">Ești conectat ca administrator. Produsele adăugate aici sunt salvate online în Firebase și vor fi vizibile tuturor vizitatorilor.</div>
-<div class="status">Administrator: <strong id="adminEmail"></strong> <button class="btn small" style="float:right;background:#eee" id="logoutBtn">Ieșire</button></div>
-
-<div class="form">
-<input id="name" placeholder="Numele produsului *">
-<input id="price" placeholder="Preț (ex. 149 lei)">
-<input id="image" placeholder="Link fotografie">
-<input id="category" placeholder="Categorie (ex. Parfumuri arăbești)">
-<textarea id="desc" placeholder="Descriere produs"></textarea>
-<div class="full">
-<button class="btn gold" id="saveBtn">+ Adaugă produs</button>
-<button class="btn" style="background:#eee" id="cancelBtn">Anulează</button>
-</div>
-</div>
-<div class="product-editor"><h3>Produsele tale</h3><div id="editorList"></div></div>
-</div>
-
+<div class="notice">Administrarea online este momentan dezactivată. Site-ul nu mai folosește Firebase.</div>
+<p style="margin:0;color:var(--muted);line-height:1.6">Produsele pot fi actualizate direct în fișierele site-ului. Datele existente în proiectul Firebase nu au fost șterse.</p>
 </div>
 </section>
 
 <footer><strong>Maison D'Amira</strong><br>WhatsApp: 0725 061 986</footer>
 
-<script type="module">
-import { initializeApp } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, sendPasswordResetEmail, onAuthStateChanged, signOut } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-auth.js";
-import { getDatabase, ref, onValue, push, set, remove } from "https://www.gstatic.com/firebasejs/12.3.0/firebase-database.js";
-
-const firebaseConfig = {
-  apiKey: "AIzaSyCNa3qQsFn5QrW0aQg_hpuE7px11t5kA7M",
-  authDomain: "maison-d-amira.firebaseapp.com",
-  projectId: "maison-d-amira",
-  storageBucket: "maison-d-amira.firebasestorage.app",
-  messagingSenderId: "18752161150",
-  appId: "1:18752161150:web:f377517bdbd9bb4d14df2f",
-  measurementId: "G-B44H70L6GR"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getDatabase(app, "https://maison-d-amira-default-rtdb.europe-west1.firebasedatabase.app");
-const ADMIN_EMAIL = "mariusraducan873@gmail.com";
-const productsRef = ref(db, "products");
+<script>
 const defaultImg="data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(`<svg xmlns="http://www.w3.org/2000/svg" width="600" height="600"><rect width="100%" height="100%" fill="#eee7dc"/><text x="50%" y="48%" text-anchor="middle" font-family="Georgia" font-size="32" fill="#806b52">Maison D'Amira</text><text x="50%" y="55%" text-anchor="middle" font-family="Arial" font-size="18" fill="#9b8a76">Fotografia produsului</text></svg>`);
-
-let products = {};
-let editId = null;
 
 function esc(s){return String(s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 function wa(p){let text=`Bună! Doresc să comand: ${p.name}${p.price?" - "+p.price:""}.`;return "https://wa.me/40725061986?text="+encodeURIComponent(text)}
+
+const products = {};
 
 function renderPublic(){
   const list=document.getElementById("productList");
   list.innerHTML="";
   const entries=Object.entries(products);
-  if(!entries.length){list.innerHTML='<div class="empty">Nu ai adăugat încă produse.</div>';return;}
+  if(!entries.length){
+    list.innerHTML='<div class="empty">Nu ai adăugat încă produse.</div>';
+    return;
+  }
   entries.forEach(([id,p])=>{
     list.innerHTML+=`<article class="card"><img src="${esc(p.image)||defaultImg}" onerror="this.src=defaultImg"><div class="body"><div class="category">${esc(p.category)||"Produs"}</div><h3>${esc(p.name)}</h3><div class="desc">${esc(p.desc)}</div><div class="price">${esc(p.price)||"Preț la cerere"}</div><div class="card-actions"><a class="btn whatsapp small" target="_blank" href="${wa(p)}">💬 Comandă pe WhatsApp</a><a class="btn gold small" href="tel:0725061986">📞 Sună</a></div></div></article>`;
   });
 }
 
-function renderEditor(){
-  const ed=document.getElementById("editorList");
-  ed.innerHTML="";
-  const entries=Object.entries(products);
-  if(!entries.length){ed.innerHTML='<div class="empty">Nu ai încă produse.</div>';return;}
-  entries.forEach(([id,p])=>{
-    ed.innerHTML+=`<div class="edit-row"><span><strong>${esc(p.name)}</strong> — ${esc(p.price)||"fără preț"}</span><span><button class="btn small" style="background:#eee" data-edit="${id}">Modifică</button> <button class="danger" data-delete="${id}">Șterge</button></span></div>`;
-  });
-  ed.querySelectorAll("[data-edit]").forEach(b=>b.onclick=()=>editProduct(b.dataset.edit));
-  ed.querySelectorAll("[data-delete]").forEach(b=>b.onclick=()=>deleteProduct(b.dataset.delete));
-}
-
-function clearForm(){
-  editId=null;
-  ["name","price","image","category","desc"].forEach(id=>document.getElementById(id).value="");
-  document.getElementById("saveBtn").textContent="+ Adaugă produs";
-}
-
-function editProduct(id){
-  const p=products[id]; if(!p)return;
-  editId=id;
-  ["name","price","image","category","desc"].forEach(k=>document.getElementById(k).value=p[k]||"");
-  document.getElementById("saveBtn").textContent="Salvează modificarea";
-  document.getElementById("admin").scrollIntoView({behavior:"smooth"});
-}
-
-async function deleteProduct(id){
-  if(!confirm("Ștergi acest produs?"))return;
-  try{await remove(ref(db,"products/"+id));}
-  catch(e){alert("Nu s-a putut șterge produsul. Verifică dacă ești conectat ca administrator.");}
-}
-
-document.getElementById("saveBtn").onclick=async()=>{
-  const user=auth.currentUser;
-  if(!user || user.email.toLowerCase()!==ADMIN_EMAIL.toLowerCase()){alert("Trebuie să fii conectat ca administrator.");return;}
-  const name=document.getElementById("name").value.trim();
-  if(!name){alert("Completează numele produsului.");return;}
-  const p={
-    name,
-    price:document.getElementById("price").value.trim(),
-    image:document.getElementById("image").value.trim(),
-    category:document.getElementById("category").value.trim(),
-    desc:document.getElementById("desc").value.trim()
-  };
-  try{
-    if(editId) await set(ref(db,"products/"+editId),p);
-    else await set(push(productsRef),p);
-    clearForm();
-  }catch(e){alert("Nu s-a putut salva produsul. Verifică regulile Firebase.");}
-};
-
-document.getElementById("cancelBtn").onclick=clearForm;
-
-document.getElementById("loginBtn").onclick=async()=>{
-  const email=document.getElementById("email").value.trim();
-  const password=document.getElementById("password").value;
-  const msg=document.getElementById("loginMsg");
-  msg.classList.remove("hidden");
-  msg.textContent="Se verifică...";
-  try{
-    const cred=await signInWithEmailAndPassword(auth,email,password);
-    if((cred.user.email||"").toLowerCase()!==ADMIN_EMAIL.toLowerCase()){
-      await signOut(auth);
-      throw new Error("Acest cont nu este administratorul.");
-    }
-    msg.textContent="";
-    msg.classList.add("hidden");
-  }catch(e){
-    console.error("Firebase login:",e);
-    const code=e?.code||"eroare necunoscută";
-    const friendly={
-      "auth/invalid-credential":"Emailul sau parola sunt incorecte.",
-      "auth/invalid-email":"Adresa de email nu este validă.",
-      "auth/user-not-found":"Nu există acest cont în Firebase Authentication.",
-      "auth/wrong-password":"Parola este incorectă.",
-      "auth/operation-not-allowed":"Autentificarea cu Email/Parolă nu este activată în Firebase.",
-      "auth/unauthorized-domain":"Domeniul GitHub Pages nu este autorizat în Firebase Authentication.",
-      "auth/too-many-requests":"Au fost prea multe încercări. Așteaptă puțin și încearcă din nou."
-    };
-    msg.textContent=(friendly[code]||"Eroare Firebase: "+code)+" Dacă problema continuă, codul este: "+code;
-  }
-};
-
-document.getElementById("resetBtn").onclick=async()=>{
-  const email=document.getElementById("email").value.trim();
-  const msg=document.getElementById("loginMsg");
-  if(!email){msg.classList.remove("hidden");msg.textContent="Introdu adresa de email.";return;}
-  try{
-    await sendPasswordResetEmail(auth,email);
-    msg.classList.remove("hidden");
-    msg.textContent="Am trimis un email pentru resetarea parolei. Verifică și folderul Spam."; 
-  }catch(e){
-    console.error("Firebase reset:",e);
-    const code=e?.code||"eroare necunoscută";
-    const friendly={
-      "auth/invalid-email":"Adresa de email nu este validă.",
-      "auth/user-not-found":"Nu există acest cont în Firebase Authentication.",
-      "auth/operation-not-allowed":"Autentificarea cu Email/Parolă nu este activată în Firebase.",
-      "auth/unauthorized-domain":"Domeniul GitHub Pages nu este autorizat în Firebase Authentication."
-    };
-    msg.classList.remove("hidden");
-    msg.textContent=(friendly[code]||"Eroare Firebase: "+code)+" Cod: "+code;
-  }
-};
-
-document.getElementById("logoutBtn").onclick=()=>signOut(auth);
-
-onAuthStateChanged(auth,user=>{
-  const ok=user && (user.email||"").toLowerCase()===ADMIN_EMAIL.toLowerCase();
-  document.getElementById("loginArea").classList.toggle("hidden",!!ok);
-  document.getElementById("adminArea").classList.toggle("hidden",!ok);
-  if(ok) document.getElementById("adminEmail").textContent=user.email;
-});
-
-onValue(productsRef,snap=>{
-  products=snap.val()||{};
-  renderPublic();
-  if(auth.currentUser && auth.currentUser.email.toLowerCase()===ADMIN_EMAIL.toLowerCase()) renderEditor();
-},err=>{
-  document.getElementById("productList").innerHTML='<div class="empty">Produsele nu pot fi încărcate momentan. Verifică regulile Firebase.</div>';
-});
-
-onAuthStateChanged(auth,user=>{
-  if(user && (user.email||"").toLowerCase()===ADMIN_EMAIL.toLowerCase()) renderEditor();
-  else document.getElementById("editorList").innerHTML="";
-});
+renderPublic();
 </script>
 </body>
 </html>
