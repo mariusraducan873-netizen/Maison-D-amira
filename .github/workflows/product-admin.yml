@@ -33,6 +33,17 @@ jobs:
               products=[]
           action=payload.get("action")
           product=payload.get("product") or {}
+          image_data=product.get("image","")
+          if image_data.startswith("data:image/"):
+              import base64, re
+              m=re.match(r"data:image/[^;]+;base64,(.+)", image_data, re.S)
+              if not m: raise SystemExit("Imagine invalidă")
+              raw=base64.b64decode(m.group(1))
+              slug=re.sub(r"[^a-z0-9]+","-",product.get("name","produs").lower()).strip("-") or "produs"
+              imgpath=f"images/{slug}.jpg"
+              os.makedirs("images",exist_ok=True)
+              open(imgpath,"wb").write(raw)
+              product["image"]=imgpath
           old=payload.get("oldName","")
           if action=="add":
               products.append(product)
