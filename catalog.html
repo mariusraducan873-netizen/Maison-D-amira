@@ -22,6 +22,8 @@ main{max-width:1150px;margin:auto;padding:45px 20px}
 .empty{text-align:center;background:rgba(250,246,239,.95);border-radius:16px;padding:35px}
 footer{text-align:center;background:#16110f;color:#ddd;padding:25px}
 @media(max-width:700px){header{flex-direction:column;align-items:flex-start}.intro h1{font-size:34px}nav a{margin:0 12px 0 0}}
+
+.cart{position:fixed;right:18px;bottom:18px;z-index:20;background:#211a17;color:#fff;border:1px solid #b9914f;border-radius:18px;width:min(380px,calc(100vw - 36px));padding:18px;box-shadow:0 10px 35px #0008}.cart h3{margin:0 0 10px;font:22px Georgia,serif;color:#f2d49b}.cart-items{max-height:220px;overflow:auto}.cart-row{display:flex;justify-content:space-between;align-items:center;gap:10px;padding:8px 0;border-bottom:1px solid #ffffff22;font-size:14px}.qty{display:flex;align-items:center;gap:6px}.qty button{border:0;border-radius:50%;width:26px;height:26px;cursor:pointer}.cart-total{font-weight:bold;font-size:18px;margin:12px 0}.cart-actions{display:flex;gap:8px}.cart-btn{flex:1;border:0;border-radius:25px;padding:11px;cursor:pointer;font-weight:bold}.cart-wa{background:#25D366;color:#fff}.cart-clear{background:#fff;color:#211a17}.add-cart{background:#b9914f;color:#fff;border:0;border-radius:30px;padding:10px 13px;font-weight:bold;cursor:pointer}
 </style>
 </head>
 <body>
@@ -45,10 +47,18 @@ async function load(){
   if(!r.ok)throw new Error("Catalog indisponibil");
   const products=await r.json();
   if(!Array.isArray(products)||!products.length){list.innerHTML='<div class="empty">Nu există produse disponibile momentan.</div>';return}
-  list.innerHTML=products.map(p=>'<article class="card"><img src="'+esc(p.image)||defaultImg+'" onerror="this.src=defaultImg"><div class="body"><div class="category">'+(esc(p.category)||"Produs")+'</div><h2>'+esc(p.name)+'</h2><div class="desc">'+esc(p.desc)+'</div><div class="price">'+(esc(p.price)||"Preț la cerere")+'</div><div class="actions"><a class="btn whatsapp" target="_blank" href="'+wa(p)+'">💬 WhatsApp</a><a class="btn gold" href="tel:0726423752">📞 Sună</a></div></div></article>').join("");
+  window.catalogProducts=products;
+  list.innerHTML=products.map((p,i)=>'<article class="card"><img src="'+esc(p.image)||defaultImg+'" onerror="this.src=defaultImg"><div class="body"><div class="category">'+(esc(p.category)||"Produs")+'</div><h2>'+esc(p.name)+'</h2><div class="desc">'+esc(p.desc)+'</div><div class="price">'+(esc(p.price)||"Preț la cerere")+'</div><div class="actions"><a class="btn whatsapp" target="_blank" href="'+wa(p)+'">💬 WhatsApp</a><a class="btn gold" href="tel:0726423752">📞 Sună</a></div></div></article>').join("");
  }catch(e){list.innerHTML='<div class="empty">Catalogul nu a putut fi încărcat. Reîncarcă pagina.</div>'}
 }
+let cart=[];
+function addToCart(i){const p=window.catalogProducts[i];const x=cart.find(x=>x.name===p.name);if(x)x.qty++;else cart.push({...p,qty:1});renderCart()}
+function changeQty(i,d){cart[i].qty+=d;if(cart[i].qty<=0)cart.splice(i,1);renderCart()}
+function clearCart(){cart=[];renderCart()}
+function renderCart(){const box=document.getElementById("cart");if(!cart.length){box.innerHTML="<h3>🛒 Coșul tău</h3><div>Coșul este gol.</div>";return}let total=0;const rows=cart.map((p,i)=>{const n=parseFloat(String(p.price).replace(",","." ).replace(/[^0-9.]/g,""))||0;total+=n*p.qty;return "<div class=\"cart-row\"><span>"+esc(p.name)+"<br>"+esc(p.price)+"</span><span class=\"qty\"><button onclick=\"changeQty("+i+",-1)\">−</button>"+p.qty+"<button onclick=\"changeQty("+i+",1)\">+</button></span></div>"}).join("");box.innerHTML="<h3>🛒 Coșul tău</h3><div class=\"cart-items\">"+rows+"</div><div class=\"cart-total\">Total: "+total.toFixed(0)+" lei</div><div class=\"cart-actions\"><button class=\"cart-btn cart-wa\" onclick=\"orderCart()\">💬 Comandă pe WhatsApp</button><button class=\"cart-btn cart-clear\" onclick=\"clearCart()\">Golește</button></div>"}
+function orderCart(){if(!cart.length)return;const lines=cart.map(p=>"• "+p.name+" × "+p.qty+" — "+p.price);const text="Bună! Doresc să comand:\n"+lines.join("\n");window.open("https://wa.me/40726423752?text="+encodeURIComponent(text),"_blank")}
 load();
 </script>
+<div id="cart" class="cart"><h3>🛒 Coșul tău</h3><div>Coșul este gol.</div></div>
 </body>
 </html>
