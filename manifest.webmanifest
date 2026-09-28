@@ -8,6 +8,6 @@
   "theme_color": "#211a17",
   "lang": "ro",
   "icons": [
-    {"src":"logo-bg.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
+    {"src":"app-icon.svg","sizes":"any","type":"image/svg+xml","purpose":"any maskable"}
   ]
 }
