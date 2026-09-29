@@ -1,1 +1,122 @@
-<!doctype html><html lang="ro"><head><meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1"><title>Administrare Maison D'Amira</title><style>body{font-family:Arial;margin:0;background:#120d08;color:white}.wrap{max-width:760px;margin:auto;padding:30px}.box{background:#fff;color:#211a17;padding:25px;border-radius:18px}input,textarea{width:100%;box-sizing:border-box;padding:12px;margin:7px 0 14px}button{padding:12px 20px;border:0;border-radius:22px;background:#b9914f;color:#fff;font-weight:bold}</style></head><body><div class="wrap"><a href="index.html" style="color:#f2d49b">← Produse</a><div class="box"><h1>Administrare produse</h1><p>🔐 Publicarea este acceptată doar de contul GitHub autorizat.</p><label>Nume</label><input id="name"><label>Preț</label><input id="price"><label>Categorie</label><input id="category" value="Parfumuri arăbești"><label>Descriere</label><textarea id="desc" rows="5"></textarea><label>Fotografia produsului</label><input id="photo" type="file" accept="image/*"><div id="photoName" style="margin:6px 0 14px;color:#756b63;font-size:14px">Nicio fotografie aleasă</div><input id="image" placeholder="sau introdu linkul imaginii"><button onclick="publish()">Trimite spre publicare</button></div></div><script>document.getElementById('photo').addEventListener('change',function(){document.getElementById('photoName').textContent=this.files[0]?this.files[0].name:'Nicio fotografie aleasă'});async function imageData(){const f=document.getElementById('photo').files[0];if(!f)return '';if(!f.type.startsWith('image/'))throw Error('Fișierul nu este o imagine.');const b=await createImageBitmap(f);const max=700,scale=Math.min(1,max/Math.max(b.width,b.height));const c=document.createElement('canvas');c.width=Math.max(1,Math.round(b.width*scale));c.height=Math.max(1,Math.round(b.height*scale));c.getContext('2d').drawImage(b,0,0,c.width,c.height);return c.toDataURL('image/jpeg',.55)};async function publish(){let n=document.getElementById('name').value.trim();if(!n)return alert('Completează numele.');let img=document.getElementById('image').value.trim();try{const uploaded=await imageData();if(uploaded)img=uploaded}catch(e){return alert(e.message)}let p={name:n,price:document.getElementById('price').value.trim(),image:img,category:document.getElementById('category').value.trim(),desc:document.getElementById('desc').value.trim()};let b='Actualizare produs Maison D’Amira.\n\n\`\`\`json\n'+JSON.stringify({action:'add',oldName:'',product:p},null,2)+'\n\`\`\`';location.href='https://github.com/mariusraducan873-netizen/Maison-D-amira/issues/new?title='+encodeURIComponent('[MAISON-PRODUCT] add '+n)+'&body='+encodeURIComponent(b)}</script></body></html>
+<!doctype html>
+<html lang="ro">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Administrare — Maison D'Amira</title>
+<style>
+:root{--dark:#211a17;--gold:#b9914f;--cream:#faf6ef;--muted:#756b63;--green:#25D366}
+*{box-sizing:border-box}body{margin:0;font-family:Arial,sans-serif;background:#090806 url('logo-bg.svg') center top/cover fixed no-repeat;color:var(--dark)}
+header{background:rgba(24,17,11,.95);color:#fff;padding:18px 6%;display:flex;justify-content:space-between;align-items:center;gap:20px}
+.logo{font:30px Georgia,serif;color:#f2d49b}.tag{font-size:13px;color:#eee;margin-top:3px}
+nav a{color:#fff;text-decoration:none;margin-left:18px;font-size:14px}
+main{max-width:1000px;margin:auto;padding:35px 20px}.box{background:rgba(250,246,239,.97);padding:25px;border-radius:18px;box-shadow:0 10px 35px #0005}
+h1,h2{font-family:Georgia,serif}.notice{background:#fff7df;padding:14px;border-radius:12px;color:#715c2f;margin-bottom:20px;line-height:1.5}
+.form{display:grid;grid-template-columns:1fr 1fr;gap:12px}.field{display:flex;flex-direction:column;gap:6px}.full{grid-column:1/-1}
+input,textarea{width:100%;box-sizing:border-box;padding:12px;border:1px solid #ddd;border-radius:10px;font:inherit}textarea{min-height:90px;resize:vertical}
+button,.btn{display:inline-block;border:0;border-radius:24px;padding:11px 16px;font-weight:bold;cursor:pointer;text-decoration:none}.gold{background:var(--gold);color:#fff}.dark{background:var(--dark);color:#fff}.light{background:#eee;color:var(--dark)}.danger{background:#f3eaea;color:#8b3333}
+.actions{display:flex;gap:10px;flex-wrap:wrap;margin-top:15px}
+#products{margin-top:28px}.row{display:flex;justify-content:space-between;align-items:center;gap:15px;padding:14px 0;border-bottom:1px solid #ddd}.row small{color:var(--muted)}.row-actions{display:flex;gap:7px;flex-wrap:wrap}
+.status{margin-top:15px;padding:12px;border-radius:10px;display:none}.status.show{display:block}.ok{background:#e8f6ed;color:#24623b}.err{background:#fae9e9;color:#8b3333}
+@media(max-width:700px){.form{grid-template-columns:1fr}.full{grid-column:auto}.row{align-items:flex-start;flex-direction:column}header{flex-direction:column;align-items:flex-start}nav a{margin:0 12px 0 0}}
+</style>
+</head>
+<body>
+<header>
+<div><div class="logo">Maison D'Amira</div><div class="tag">Administrare produse</div></div>
+<nav><a href="index.html">Acasă</a><a href="catalog.html">Catalog</a></nav>
+</header>
+<main>
+<div class="box">
+<h1>Administrare produse</h1>
+<div class="notice"><strong>🔐 Publicarea se face prin contul GitHub autorizat.</strong><br>
+Când apeși „Publică”, vei fi trimis pe GitHub. Trebuie să fii autentificat cu contul <strong>mariusraducan873-netizen</strong>. Modificarea este procesată automat și ajunge în catalog.</div>
+
+<div class="actions">
+<a class="btn dark" target="_blank" href="https://github.com/login">🔑 Autentificare GitHub</a>
+<a class="btn light" target="_blank" href="https://github.com/mariusraducan873-netizen/Maison-D-amira">Deschide repository</a>
+</div>
+
+<h2 id="formTitle">Adaugă produs</h2>
+<div class="form">
+<div class="field"><label>Nume</label><input id="name" placeholder="Ex. Lattafa Asad"></div>
+<div class="field"><label>Preț</label><input id="price" placeholder="Ex. 90 lei"></div>
+<div class="field"><label>Categorie</label><input id="category" value="Parfumuri arăbești"></div>
+<div class="field"><label>Fotografie</label><input id="photo" type="file" accept="image/*"><small id="photoName">Nicio fotografie aleasă</small></div>
+<div class="field full"><label>Link imagine (opțional, dacă nu încarci fișier)</label><input id="image" placeholder="https://..."></div>
+<div class="field full"><label>Descriere</label><textarea id="desc" placeholder="Descrierea produsului"></textarea></div>
+</div>
+<div class="actions">
+<button class="gold" onclick="publish()">Publică produsul</button>
+<button class="light" onclick="resetForm()">Anulează</button>
+</div>
+<div id="status" class="status"></div>
+
+<div id="products"><h2>Produse existente</h2><div id="list">Se încarcă...</div></div>
+</div>
+</main>
+
+<script>
+const ISSUE_BASE="https://github.com/mariusraducan873-netizen/Maison-D-amira/issues/new";
+let products=[], editIndex=-1;
+const $=id=>document.getElementById(id);
+$("photo").addEventListener("change",()=>{$("photoName").textContent=$("photo").files[0]?.name||"Nicio fotografie aleasă"});
+
+function esc(s){return String(s??"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
+function status(msg,err=false){$("status").className="status show "+(err?"err":"ok");$("status").textContent=msg}
+
+async function load(){
+ try{
+  const r=await fetch("products.json?v="+Date.now(),{cache:"no-store"});
+  products=await r.json();
+  renderList();
+ }catch(e){$("list").textContent="Nu am putut încărca produsele.";status("Catalogul nu a putut fi încărcat.",true)}
+}
+function renderList(){
+ if(!products.length){$("list").innerHTML="<p>Niciun produs.</p>";return}
+ $("list").innerHTML=products.map((p,i)=>`
+ <div class="row"><div><strong>${esc(p.name)}</strong><br><small>${esc(p.category||"Produs")} · ${esc(p.price||"Preț la cerere")}</small></div>
+ <div class="row-actions"><button class="light" onclick="editProduct(${i})">Modifică</button><button class="danger" onclick="deleteProduct(${i})">Șterge</button></div></div>`).join("");
+}
+function editProduct(i){
+ const p=products[i];editIndex=i;
+ $("formTitle").textContent="Modifică produs";
+ $("name").value=p.name||"";$("price").value=p.price||"";$("category").value=p.category||"";
+ $("image").value=p.image&&p.image.startsWith("http")?p.image:"";$("desc").value=p.desc||"";
+ $("photo").value="";$("photoName").textContent=p.image&&!p.image.startsWith("http")?"Fotografia existentă va fi păstrată dacă nu alegi alta":"Nicio fotografie aleasă";
+ scrollTo({top:0,behavior:"smooth"});
+}
+function resetForm(){
+ editIndex=-1;$("formTitle").textContent="Adaugă produs";
+ ["name","price","image","desc"].forEach(id=>$(id).value="");$("category").value="Parfumuri arăbești";$("photo").value="";$("photoName").textContent="Nicio fotografie aleasă";
+}
+async function imageData(){
+ const f=$("photo").files[0];if(!f)return "";
+ if(!f.type.startsWith("image/"))throw Error("Fișierul ales nu este o imagine.");
+ const b=await createImageBitmap(f),max=900,scale=Math.min(1,max/Math.max(b.width,b.height));
+ const c=document.createElement("canvas");c.width=Math.max(1,Math.round(b.width*scale));c.height=Math.max(1,Math.round(b.height*scale));
+ c.getContext("2d").drawImage(b,0,0,c.width,c.height);return c.toDataURL("image/jpeg",.65);
+}
+async function makeProduct(){
+ const name=$("name").value.trim();if(!name)throw Error("Completează numele produsului.");
+ let image=$("image").value.trim();const uploaded=await imageData();if(uploaded)image=uploaded;
+ if(!image&&editIndex>=0)image=products[editIndex].image||"";
+ return {name,price:$("price").value.trim(),image,category:$("category").value.trim(),desc:$("desc").value.trim()};
+}
+function openIssue(action,p,oldName=""){
+ const payload={action,oldName,product:p};
+ const body="Actualizare produs Maison D'Amira.\n\n```json\n"+JSON.stringify(payload,null,2)+"\n```";
+ const title="[MAISON-PRODUCT] "+action+" "+(p?.name||oldName||"produs");
+ location.href=ISSUE_BASE+"?title="+encodeURIComponent(title)+"&body="+encodeURIComponent(body);
+}
+async function publish(){
+ try{const p=await makeProduct();openIssue(editIndex>=0?"update":"add",p,editIndex>=0?products[editIndex].name:"")}
+ catch(e){status(e.message,true)}
+}
+function deleteProduct(i){
+ const p=products[i];if(confirm("Ștergi produsul „"+p.name+"”?"))openIssue("delete",p,p.name);
+}
+load();
+</script>
+</body>
+</html>
