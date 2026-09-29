@@ -69,7 +69,7 @@ jobs:
         run: |
           git config user.name "Maison D'Amira"
           git config user.email "actions@github.com"
-          git add products.json
+          git add products.json images/
           git commit -m "Actualizează catalogul de produse"
           git push
 
