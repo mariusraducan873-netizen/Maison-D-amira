@@ -55,14 +55,47 @@ const defaultImg="data:image/svg+xml;charset=UTF-8,"+encodeURIComponent(\`<svg x
 let products=[],editName="";
 function esc(s){return String(s||"").replace(/[&<>"']/g,m=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;","'":"&#039;"}[m]))}
 function wa(p){let text=\`Bună! Doresc să comand: \${p.name}\${p.price?" - "+p.price:""}.\`;return "https://wa.me/40726423752?text="+encodeURIComponent(text)}
-async function loadProducts(){try{const r=await fetch("products.json?v="+Date.now(),{cache:"no-store"});if(!r.ok)throw new Error("products.json");products=await r.json()}catch(e){console.error(e);products=[]}render()}
+async function loadProducts(){
+  try{
+    const r=await fetch("products.json?v="+Date.now(),{cache:"no-store"});
+    if(!r.ok) throw new Error("products.json");
+    const data=await r.json();
+    products=Array.isArray(data)?data:[];
+  }catch(e){
+    console.error(e);
+    products=[
+      {name:"Ramz Lattafa",price:"90 lei",image:"https://houseofniche.nl/cdn/shop/files/Lattafa_Ramz_Silver.png?v=1725185033&width=1946",category:"Parfumuri arăbești",desc:"Parfum arăbesc cu aromă dulce, caldă și seducătoare."},
+      {name:"Lattafa Asad",price:"90 lei",image:"https://hiddensamples.com/cdn/shop/products/lattafa-asad-perfume-bottle-front-packshot-white.jpg?v=1772779120",category:"Parfumuri arăbești",desc:"Parfum bărbătesc intens, condimentat și elegant."},
+      {name:"Lattafa Yara",price:"90 lei",image:"https://cdn.shopify.com/s/files/1/0651/6654/0866/files/Perfume-Lattafa-Yara-EDP-W-100-ml.webp?v=1764839263",category:"Parfumuri arăbești",desc:"Aromă dulce, cremoasă și feminină, cu note de vanilie și mosc."},
+      {name:"Lattafa Khamrah Waha",price:"90 lei",image:"https://emiratesoud.co.uk/cdn/shop/files/Khamrah-Waha-Perfume-100ml-EDP-Lattafa-190911355.png?v=1778604422",category:"Parfumuri arăbești",desc:"Parfum oriental cu prezență caldă și sofisticată."},
+      {name:"Lattafa Jouri",price:"90 lei",image:"https://emiratesoud.co.uk/cdn/shop/files/Jouri-Perfume-100ml-EDP-Lattafa-189221979.png",category:"Parfumuri arăbești",desc:"Parfum arăbesc elegant, potrivit pentru iubitorii de arome rafinate."}
+    ];
+  }
+  render();
+}
 function render(){
- let list=document.getElementById("productList");list.innerHTML="";
- if(!products.length)list.innerHTML='<div class="empty">Nu ai adăugat încă produse.</div>';
- products.forEach((p,i)=>{
-  list.innerHTML+=\`<article class="card"><img src="\${esc(p.image)||defaultImg}" onerror="this.src=defaultImg"><div class="body"><div class="category">\${esc(p.category)||"Produs"}</div><h3>\${esc(p.name)}</h3><div class="desc">\${esc(p.desc)}</div><div class="price">\${esc(p.price)||"Preț la cerere"}</div><div class="card-actions"><a class="btn whatsapp small" target="_blank" href="\${wa(p)}">💬 Comandă pe WhatsApp</a><a class="btn gold small" href="tel:0726423752">📞 Sună</a></div></div></article>\`;
-  ed.innerHTML+=\`<div class="edit-row"><span><strong>\${esc(p.name)}</strong> — \${esc(p.price)||"fără preț"}</span><span><button class="btn small" style="background:#eee" onclick="editProduct(\${i})">Modifică</button> <button class="danger" onclick="deleteProduct(\${i})">Șterge</button></span></div>\`;
- });
+  const list=document.getElementById("productList");
+  list.innerHTML="";
+  if(!products.length){
+    list.innerHTML='<div class="empty">Nu ai adăugat încă produse.</div>';
+    return;
+  }
+  products.forEach(p=>{
+    const image=esc(p.image)||defaultImg;
+    list.innerHTML+=`<article class="card">
+      <img src="${image}" onerror="this.onerror=null;this.src=defaultImg" alt="${esc(p.name)}">
+      <div class="body">
+        <div class="category">${esc(p.category)||"Produs"}</div>
+        <h3>${esc(p.name)}</h3>
+        <div class="desc">${esc(p.desc)}</div>
+        <div class="price">${esc(p.price)||"Preț la cerere"}</div>
+        <div class="card-actions">
+          <a class="btn whatsapp small" target="_blank" href="${wa(p)}">💬 Comandă pe WhatsApp</a>
+          <a class="btn gold small" href="tel:0726423752">📞 Sună</a>
+        </div>
+      </div>
+    </article>`;
+  });
 }
 function issueUrl(action,p,oldName=""){
  const payload={action,oldName,product:p};
